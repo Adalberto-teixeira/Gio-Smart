@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://giosmart-services.fr/sitemap.xml
