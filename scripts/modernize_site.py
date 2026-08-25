@@ -9,6 +9,20 @@ PRELOADER = re.compile(
     re.IGNORECASE | re.DOTALL,
 )
 
+
+def clean_internal_url(url):
+    """Return the public, extensionless route for a local HTML URL."""
+    if url.startswith("https://giosmart-services.fr/"):
+        return re.sub(r"\.html(?=([?#]|$))", "", url)
+    if url.startswith(("http:", "https:", "//", "mailto:", "tel:", "data:", "#")):
+        return url
+
+    match = re.fullmatch(r"(?:\./)?([^?#]*?)\.html([?#].*)?", url)
+    if not match:
+        return url
+    route, suffix = match.group(1), match.group(2) or ""
+    return ("/" if route == "index" else f"/{route.lstrip('/')}") + suffix
+
 for path in ROOT.glob("*.html"):
     source = path.read_text(encoding="utf-8")
 
@@ -97,6 +111,29 @@ for path in ROOT.glob("*.html"):
     for old, new in replacements.items():
         source = source.replace(old, new)
 
+    # Public navigation uses canonical, extensionless routes. Physical files keep
+    # their .html suffix because Vercel maps them through cleanUrls.
+    source = re.sub(
+        r'(?P<prefix>\bhref=["\'])(?P<url>[^"\']+)(?P<suffix>["\'])',
+        lambda match: (
+            match.group("prefix")
+            + clean_internal_url(match.group("url"))
+            + match.group("suffix")
+        ),
+        source,
+        flags=re.IGNORECASE,
+    )
+    source = re.sub(
+        r'(?P<prefix>\bcontent=["\'])(?P<url>https://giosmart-services\.fr/[^"\']+)(?P<suffix>["\'])',
+        lambda match: (
+            match.group("prefix")
+            + clean_internal_url(match.group("url"))
+            + match.group("suffix")
+        ),
+        source,
+        flags=re.IGNORECASE,
+    )
+
     source = source.replace('decoding="async" decoding="async"', 'decoding="async"')
 
     path.write_text(source, encoding="utf-8")
@@ -104,5 +141,10 @@ for path in ROOT.glob("*.html"):
 sitemap = ROOT / "sitemap.xml"
 if sitemap.exists():
     sitemap_source = sitemap.read_text(encoding="utf-8")
+    sitemap_source = re.sub(
+        r"https://giosmart-services\.fr/([^<]+?)\.html(?=</loc>)",
+        r"https://giosmart-services.fr/\1",
+        sitemap_source,
+    )
     sitemap_source = re.sub(r"<lastmod>[^<]+</lastmod>", "<lastmod>2026-08-25</lastmod>", sitemap_source)
     sitemap.write_text(sitemap_source, encoding="utf-8")

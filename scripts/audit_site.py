@@ -10,6 +10,17 @@ ROOT = Path(__file__).resolve().parent.parent
 errors = []
 
 
+def resolve_local_reference(reference):
+    """Map a public clean route back to its source file for validation."""
+    path = urlparse(reference).path.lstrip("/")
+    if not path:
+        return ROOT / "index.html"
+    direct = ROOT / path
+    if direct.exists():
+        return direct
+    return ROOT / f"{path}.html"
+
+
 class PageParser(HTMLParser):
     def __init__(self):
         super().__init__()
@@ -33,7 +44,7 @@ for page in sorted(ROOT.glob("*.html")):
     parser = PageParser()
     parser.feed(page.read_text(encoding="utf-8"))
     for reference in parser.references:
-        if reference and not (ROOT / reference).exists() and not reference.endswith("/"):
+        if reference and not resolve_local_reference(reference).exists():
             errors.append(f"{page.name}: missing {reference}")
     duplicates = [item for item, count in Counter(parser.ids).items() if count > 1]
     if duplicates:
@@ -43,9 +54,8 @@ for page in sorted(ROOT.glob("*.html")):
 
 namespace = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 for node in ET.parse(ROOT / "sitemap.xml").findall(".//s:loc", namespace):
-    local_path = urlparse(node.text).path.lstrip("/") or "index.html"
-    if not (ROOT / local_path).exists():
-        errors.append(f"sitemap.xml: missing {local_path}")
+    if not resolve_local_reference(node.text).exists():
+        errors.append(f"sitemap.xml: missing {node.text}")
 
 if errors:
     raise SystemExit("\n".join(errors))
