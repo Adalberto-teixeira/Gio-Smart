@@ -124,7 +124,12 @@
 				"\n\nDétails : " + message;
 
 			var url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
-			window.open(url, "_blank");
+			var whatsappWindow = window.open(url, "_blank");
+			if (whatsappWindow) {
+				whatsappWindow.opener = null;
+			} else {
+				window.location.href = url;
+			}
 			submitMSG(true, "Redirection vers WhatsApp...");
 		});
 	}

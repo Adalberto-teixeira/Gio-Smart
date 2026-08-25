@@ -179,6 +179,22 @@ for path in ROOT.glob("*.html"):
     for old, new in replacements.items():
         source = source.replace(old, new)
 
+    if path.name == "index.html":
+        # Keep the homepage focused: these legacy blocks repeat services or use
+        # weak vanity metrics without helping visitors request a quote.
+        for start, end in (
+            ("Client Slider Section Start", "Client Slider Section End"),
+            ("Chiffres Clés Start", "Chiffres Clés End"),
+            ("Meilleurs Services Start", "Meilleurs Services End"),
+        ):
+            source = re.sub(
+                rf'\s*<!-- {re.escape(start)} -->.*?<!-- {re.escape(end)} -->\s*',
+                "\n",
+                source,
+                count=1,
+                flags=re.DOTALL,
+            )
+
     # Public navigation uses canonical, extensionless routes. Physical files keep
     # their .html suffix because Vercel maps them through cleanUrls.
     source = re.sub(
@@ -196,13 +212,13 @@ for path in ROOT.glob("*.html"):
     # while these two files change with normal site releases.
     source = re.sub(
         r'href="css/custom\.css(?:\?v=[^"]+)?"',
-        'href="css/custom.css?v=20260826-1"',
+        'href="css/custom.css?v=20260826-2"',
         source,
         count=1,
     )
     source = re.sub(
         r'src="js/function\.js(?:\?v=[^"]+)?"',
-        'src="js/function.js?v=20260826-1"',
+        'src="js/function.js?v=20260826-2"',
         source,
         count=1,
     )
