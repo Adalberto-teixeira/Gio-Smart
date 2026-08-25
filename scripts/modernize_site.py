@@ -149,6 +149,13 @@ for path in ROOT.glob("*.html"):
     # navigation. Limit the change to this component so header links stay clean.
     current_route = SERVICE_ROUTES.get(path.name)
     if current_route:
+        source = re.sub(
+            r'href="css/custom\.css(?:\?v=[^"]+)?"',
+            'href="css/custom.css?v=20260825-active-menu"',
+            source,
+            count=1,
+        )
+
         def mark_current_service(match):
             sidebar = match.group(0)
             sidebar = sidebar.replace(' class="is-active"', '')
