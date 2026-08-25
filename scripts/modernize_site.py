@@ -20,6 +20,29 @@ SERVICE_ROUTES = {
     "nettoyage-apres-travaux-demenagement.html": "/nettoyage-apres-travaux-demenagement",
 }
 
+ROUTE_LABELS = {
+    "/menage-et-entretien": "Découvrir le service Ménage et entretien",
+    "/aide-a-la-personne": "Découvrir le service Aide aux personnes",
+    "/aide-au-demenagement": "Découvrir le service Aide au déménagement",
+    "/services-numeriques": "Découvrir les services numériques",
+    "/blanchisserie-et-couture": "Découvrir le service Blanchisserie et couture",
+    "/services-soins-animaux": "Découvrir le service Soins des animaux",
+    "/petits-travaux-maison": "Découvrir le service Petits travaux",
+    "/nettoyage-apres-travaux-demenagement": "Découvrir le nettoyage après travaux et déménagement",
+    "/carte-visite-branding": "Voir le projet de cartes de visite",
+    "/montage-cuisine-marseille": "Voir le projet de montage de meubles",
+    "/nettoyage-jardin-vitrolles": "Voir le projet de nettoyage de jardin",
+    "/local-technique-construction": "Voir le projet de construction du local technique",
+    "/aide-demenagement-marseille-vitrolles": "Voir le projet de déménagement",
+}
+
+# Vercel automatically serves a root 404.html for unknown static routes. Keep
+# the designed error page as the single source so both versions stay aligned.
+not_found_source = ROOT / "page-introuvable.html"
+not_found_target = ROOT / "404.html"
+if not_found_source.exists():
+    not_found_target.write_text(not_found_source.read_text(encoding="utf-8"), encoding="utf-8")
+
 
 def clean_internal_url(url):
     """Return the public, extensionless route for a local HTML URL."""
@@ -107,6 +130,33 @@ for path in ROOT.glob("*.html"):
   <meta name="twitter:card" content="summary_large_image" />'''
             source = source.replace(canonical_match.group(1), social, 1)
 
+    # Refresh existing sharing metadata from the page title and description.
+    # Attribute values use double quotes, so French apostrophes remain intact.
+    title_match = re.search(r'<title>(.*?)</title>', source, re.DOTALL | re.IGNORECASE)
+    desc_match = re.search(
+        r'<meta\s+name="description"\s+content="([^"]*)"',
+        source,
+        re.DOTALL | re.IGNORECASE,
+    )
+    if title_match:
+        social_title = html.escape(re.sub(r'\s+', ' ', title_match.group(1)).strip(), quote=True)
+        source = re.sub(
+            r'(<meta\s+property="og:title"\s+content=")[^"]*("\s*/?>)',
+            lambda match: match.group(1) + social_title + match.group(2),
+            source,
+            count=1,
+            flags=re.IGNORECASE,
+        )
+    if desc_match:
+        social_description = html.escape(re.sub(r'\s+', ' ', desc_match.group(1)).strip(), quote=True)
+        source = re.sub(
+            r'(<meta\s+property="og:description"\s+content=")[^"]*("\s*/?>)',
+            lambda match: match.group(1) + social_description + match.group(2),
+            source,
+            count=1,
+            flags=re.IGNORECASE,
+        )
+
     # Common copy fixes.
     replacements = {
         "Nos Réalisation": "Nos réalisations",
@@ -115,6 +165,13 @@ for path in ROOT.glob("*.html"):
         "Nettoyage apres travaux demenagement": "Nettoyage après travaux et déménagement",
         "contacter sur whatsapp": "Contacter sur WhatsApp",
         "Contacter Sur Whatsapp": "Contacter sur WhatsApp",
+        "Luni à Vendredi": "Lundi à vendredi",
+        "Dimarche": "Dimanche",
+        "urgennce": "urgence",
+        "Tous nos Services": "Tous nos services",
+        "Aide Déménagement": "Aide au déménagement",
+        "Soin des Animaux": "Soins des animaux",
+        '<a href="/services-numeriques">Soins des animaux</a>': '<a href="/services-soins-animaux">Soins des animaux</a>',
         ">adalbertofurtado.com<": ">adalberto.fr<",
         "<h3>Adresse</h3>": "<h3>Zone d’intervention</h3>",
         "<p>12 Avenue Charles Moulet, 13500 Martigues</p>": "<p>Martigues et alentours</p>",
@@ -134,6 +191,36 @@ for path in ROOT.glob("*.html"):
         source,
         flags=re.IGNORECASE,
     )
+
+    # Version the site-owned assets globally. Vendor libraries are immutable,
+    # while these two files change with normal site releases.
+    source = re.sub(
+        r'href="css/custom\.css(?:\?v=[^"]+)?"',
+        'href="css/custom.css?v=20260826-1"',
+        source,
+        count=1,
+    )
+    source = re.sub(
+        r'src="js/function\.js(?:\?v=[^"]+)?"',
+        'src="js/function.js?v=20260826-1"',
+        source,
+        count=1,
+    )
+
+    # Image-only service/project links need an accessible name for screen readers.
+    def label_visual_link(match):
+        route = match.group("route")
+        label = ROUTE_LABELS.get(route)
+        if not label:
+            return match.group(0)
+        return f'<a aria-label="{label}"{match.group("before")}href="{route}"{match.group("after")}>'
+
+    source = re.sub(
+        r'<a(?![^>]*\baria-label=)(?P<before>[^>]*?)href="(?P<route>/[^"]+)"(?P<after>[^>]*?\bdata-cursor-text="Voir"[^>]*)>',
+        label_visual_link,
+        source,
+        flags=re.IGNORECASE,
+    )
     source = re.sub(
         r'(?P<prefix>\bcontent=["\'])(?P<url>https://giosmart-services\.fr/[^"\']+)(?P<suffix>["\'])',
         lambda match: (
@@ -149,13 +236,6 @@ for path in ROOT.glob("*.html"):
     # navigation. Limit the change to this component so header links stay clean.
     current_route = SERVICE_ROUTES.get(path.name)
     if current_route:
-        source = re.sub(
-            r'href="css/custom\.css(?:\?v=[^"]+)?"',
-            'href="css/custom.css?v=20260825-active-menu"',
-            source,
-            count=1,
-        )
-
         def mark_current_service(match):
             sidebar = match.group(0)
             sidebar = sidebar.replace(' class="is-active"', '')
@@ -174,6 +254,16 @@ for path in ROOT.glob("*.html"):
             flags=re.DOTALL,
         )
 
+    if path.name == "404.html":
+        if 'name="robots"' not in source:
+            source = source.replace(
+                '<meta name="author"',
+                '<meta name="robots" content="noindex, follow" />\n    <meta name="author"',
+                1,
+            )
+        source = re.sub(r'\s*<link\s+rel="canonical"[^>]*>', '', source, count=1)
+        source = re.sub(r'\s*<meta\s+property="og:url"[^>]*>', '', source, count=1)
+
     source = source.replace('decoding="async" decoding="async"', 'decoding="async"')
 
     path.write_text(source, encoding="utf-8")
@@ -186,5 +276,5 @@ if sitemap.exists():
         r"https://giosmart-services.fr/\1",
         sitemap_source,
     )
-    sitemap_source = re.sub(r"<lastmod>[^<]+</lastmod>", "<lastmod>2026-08-25</lastmod>", sitemap_source)
+    sitemap_source = re.sub(r"<lastmod>[^<]+</lastmod>", "<lastmod>2026-08-26</lastmod>", sitemap_source)
     sitemap.write_text(sitemap_source, encoding="utf-8")

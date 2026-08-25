@@ -52,6 +52,11 @@ for page in sorted(ROOT.glob("*.html")):
     if page.name != "page-introuvable.html" and parser.h1_count != 1:
         errors.append(f"{page.name}: expected one H1, found {parser.h1_count}")
 
+    if page.name == "services.html":
+        source = page.read_text(encoding="utf-8")
+        if '<a href="/services-numeriques">Soins des animaux</a>' in source:
+            errors.append("services.html: animal care title points to digital services")
+
 namespace = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 for node in ET.parse(ROOT / "sitemap.xml").findall(".//s:loc", namespace):
     if not resolve_local_reference(node.text).exists():
