@@ -1906,21 +1906,23 @@ header.main-header .header-sticky.active{
 .footer-contact-box{
 	width: calc(80% - 10px);
 	display: flex;
-	flex-wrap: wrap;
-	justify-content: end;
-	gap: 30px 80px;
+	flex-wrap: nowrap;
+	justify-content: center;
+	gap: 30px;
 }
 
 .footer-contact-item{
 	position: relative;
 	display: flex;
 	align-items: center;
+	flex: 1 1 0;
+	min-width: 0;
 }
 
 .footer-contact-item::before{
 	content: '';
 	position: absolute;
-	right: -40px;
+	right: -15px;
 	bottom: 0;
 	background-color: var(--dark-divider-color);
 	height: 100%;

@@ -91,6 +91,8 @@ for path in ROOT.glob("*.html"):
         "contacter sur whatsapp": "Contacter sur WhatsApp",
         "Contacter Sur Whatsapp": "Contacter sur WhatsApp",
         ">adalbertofurtado.com<": ">adalberto.fr<",
+        "<h3>Adresse</h3>": "<h3>Zone d’intervention</h3>",
+        "<p>12 Avenue Charles Moulet, 13500 Martigues</p>": "<p>Martigues et alentours</p>",
     }
     for old, new in replacements.items():
         source = source.replace(old, new)
