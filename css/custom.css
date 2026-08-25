@@ -2523,6 +2523,16 @@ header.main-header .header-sticky.active{
     color: var(--primary-color);
 }
 
+.service-catagery-list ul li a.is-active,
+.service-catagery-list ul li a.is-active:hover{
+	color: var(--white-color);
+	background-color: var(--accent-color);
+	border-radius: 10px;
+	font-weight: 600;
+	padding: 10px 40px 10px 14px;
+	margin: -10px -14px;
+}
+
 .service-catagery-list ul li a::before{
     content: '';
     position: absolute;
@@ -2540,6 +2550,11 @@ header.main-header .header-sticky.active{
 
 .service-catagery-list ul li a:hover::before{
 	filter: brightness(0) invert(0);
+}
+
+.service-catagery-list ul li a.is-active::before,
+.service-catagery-list ul li a.is-active:hover::before{
+	filter: brightness(0) invert(1);
 }
 
 .sidebar-timing{

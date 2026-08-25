@@ -9,6 +9,17 @@ PRELOADER = re.compile(
     re.IGNORECASE | re.DOTALL,
 )
 
+SERVICE_ROUTES = {
+    "menage-et-entretien.html": "/menage-et-entretien",
+    "aide-a-la-personne.html": "/aide-a-la-personne",
+    "aide-au-demenagement.html": "/aide-au-demenagement",
+    "services-numeriques.html": "/services-numeriques",
+    "blanchisserie-et-couture.html": "/blanchisserie-et-couture",
+    "services-soins-animaux.html": "/services-soins-animaux",
+    "petits-travaux-maison.html": "/petits-travaux-maison",
+    "nettoyage-apres-travaux-demenagement.html": "/nettoyage-apres-travaux-demenagement",
+}
+
 
 def clean_internal_url(url):
     """Return the public, extensionless route for a local HTML URL."""
@@ -133,6 +144,28 @@ for path in ROOT.glob("*.html"):
         source,
         flags=re.IGNORECASE,
     )
+
+    # Mark the current service in the shared sidebar for visual and assistive
+    # navigation. Limit the change to this component so header links stay clean.
+    current_route = SERVICE_ROUTES.get(path.name)
+    if current_route:
+        def mark_current_service(match):
+            sidebar = match.group(0)
+            sidebar = sidebar.replace(' class="is-active"', '')
+            sidebar = sidebar.replace(' aria-current="page"', '')
+            return sidebar.replace(
+                f'<a href="{current_route}"',
+                f'<a class="is-active" href="{current_route}" aria-current="page"',
+                1,
+            )
+
+        source = re.sub(
+            r'<div class="service-catagery-list\b.*?</div>',
+            mark_current_service,
+            source,
+            count=1,
+            flags=re.DOTALL,
+        )
 
     source = source.replace('decoding="async" decoding="async"', 'decoding="async"')
 
