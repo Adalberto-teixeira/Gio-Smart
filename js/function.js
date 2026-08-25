@@ -4,11 +4,6 @@
 	var $window = $(window); 
 	var $body = $('body'); 
 
-	/* Preloader Effect */
-	$window.on('load', function(){
-		$(".preloader").fadeOut(600);
-	});
-
 	/* Slick Menu JS */
 	$('#menu').slicknav({
 		label : '',
@@ -54,7 +49,7 @@
 		$('.counter').counterUp({ delay: 6, time: 3000 });
 	}
 
-	if ($('.text-anime-style-3').length) {		
+	if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && $('.text-anime-style-3').length) {
 		let	animatedTextElements = document.querySelectorAll('.text-anime-style-3');
 		
 		 animatedTextElements.forEach((element) => {
@@ -110,16 +105,23 @@
 
 			var fname = $("#fname").val().trim();
 			var lname = $("#lname").val().trim();
+			var phone = $("#phone").val().trim();
+			var city = $("#city").val().trim();
 			var serviceType = $("#serviceType").val();
+			var preferredDate = $("#preferredDate").val();
 			var message = $("#message").val().trim();
 
-			if (!fname || !lname || !serviceType || !message) {
+			if (!fname || !lname || !phone || !city || !serviceType || !message) {
 				submitMSG(false, "Merci de remplir tous les champs avant d'envoyer.");
 				return;
 			}
 
 			var text = "Bonjour Gio Smart, je m'appelle " + fname + " " + lname +
-				". Je suis intéressé(e) par : " + serviceType + ".\n\n" + message;
+				".\nTéléphone : " + phone +
+				"\nVille : " + city +
+				"\nService souhaité : " + serviceType +
+				(preferredDate ? "\nDate souhaitée : " + preferredDate : "") +
+				"\n\nDétails : " + message;
 
 			var url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
 			window.open(url, "_blank");
@@ -137,8 +139,12 @@
 		$("#msgSubmit").removeClass().addClass(msgClasses).text(msg);
 	}
 
-	/* Animated Wow Js */	
-	new WOW().init();
+	/* Animated Wow Js */
+	if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		new WOW().init();
+	} else {
+		$('.wow').css('visibility', 'visible');
+	}
 
 	/* Popup Video */
 	if ($('.popup-video').length) {

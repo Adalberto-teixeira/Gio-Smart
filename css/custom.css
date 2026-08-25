@@ -274,6 +274,41 @@ body{
 	justify-content: center;
 }
 
+/* Accessibility and mobile performance */
+:focus-visible{
+	outline: 3px solid var(--accent-color);
+	outline-offset: 4px;
+}
+
+img{
+	height: auto;
+}
+
+.contact-form label{
+	display: inline-block;
+	margin-bottom: 8px;
+	font-weight: 600;
+}
+
+.form-privacy-note{
+	margin: 16px 0 0;
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce){
+	*, *::before, *::after{
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		scroll-behavior: auto !important;
+		transition-duration: 0.01ms !important;
+	}
+
+	.wow{
+		visibility: visible !important;
+	}
+}
+
 .loading-container,
 .loading{
 	height: 100px;
@@ -4669,6 +4704,29 @@ header.main-header .header-sticky.active{
 }
 
 @media only screen and (max-width: 767px){
+	body{
+		overflow-x: hidden;
+	}
+
+	.bg-radius-section{
+		border-radius: 22px 22px 0 0;
+	}
+
+	.hero{
+		padding: 135px 0 110px;
+	}
+
+	.hero-btn{
+		display: grid;
+		gap: 12px;
+	}
+
+	.hero-btn .btn-default,
+	.hero-btn .btn-default.btn-highlighted{
+		width: 100%;
+		margin: 0;
+		text-align: center;
+	}
 
 	.section-row{
 		margin-bottom: 30px;
