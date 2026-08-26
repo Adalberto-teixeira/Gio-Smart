@@ -58,7 +58,7 @@
     <!-- Magnific Popup Core Css File -->
     <!-- Mouse Cursor Css File -->
     <!-- Main Custom Css -->
-    <link href="css/custom.css?v=20260826-5" rel="stylesheet" media="screen" />
+    <link href="css/custom.css?v=20260826-6" rel="stylesheet" media="screen" />
   </head>
   <body>
 <!-- Header Start -->
@@ -250,8 +250,8 @@
                   Prenez contact avec notre équipe
                 </h2>
                 <p class="wow fadeInUp" data-wow-delay="0.2s">
-                  Décrivez votre besoin, puis choisissez de préparer votre
-                  message dans WhatsApp ou dans votre application e-mail.
+                  Décrivez votre besoin, puis choisissez de l’envoyer
+                  directement par e-mail ou de poursuivre dans WhatsApp.
                 </p>
               </div>
               <!-- Section Title End -->
@@ -260,9 +260,8 @@
               <div class="member-contect-form contact-form">
                 <form
                   id="whatsappForm"
-                  action="mailto:contact@giosmart-services.fr"
+                  action="/api/contact"
                   method="post"
-                  enctype="text/plain"
                   class="wow fadeInUp"
                   data-wow-delay="0.4s"
                 >
@@ -294,13 +293,19 @@
                     <div class="form-group col-md-6 mb-4">
                       <label for="phone">Téléphone *</label>
                       <input type="tel" name="phone" class="form-control" id="phone"
-                        placeholder="06 00 00 00 00" autocomplete="tel" required />
+                        placeholder="06 00 00 00 00" autocomplete="tel" maxlength="40" required />
                     </div>
 
                     <div class="form-group col-md-6 mb-4">
                       <label for="city">Ville ou code postal *</label>
                       <input type="text" name="city" class="form-control" id="city"
-                        placeholder="Ex. Martigues, 13500" autocomplete="postal-code" required />
+                        placeholder="Ex. Martigues, 13500" autocomplete="postal-code" maxlength="120" required />
+                    </div>
+
+                    <div class="form-group col-md-12 mb-4">
+                      <label for="email">E-mail (nécessaire pour l’envoi par e-mail)</label>
+                      <input type="email" name="email" class="form-control" id="email"
+                        placeholder="vous@exemple.fr" autocomplete="email" maxlength="254" />
                     </div>
 
                     <div class="form-group col-md-12 mb-4">
@@ -343,8 +348,14 @@
                         id="message"
                         rows="4"
                         placeholder="Votre message"
+                        maxlength="4000"
                         required
                       ></textarea>
+                    </div>
+
+                    <div class="form-honeypot" aria-hidden="true">
+                      <label for="website">Ne pas remplir ce champ</label>
+                      <input type="text" name="website" id="website" tabindex="-1" autocomplete="off" />
                     </div>
 
                     <div class="col-md-12">
@@ -359,7 +370,7 @@
                         </button>
                       </div>
                       <p class="form-privacy-note">
-                        Vos informations sont préparées localement, puis ouvertes uniquement dans le moyen de contact que vous choisissez.
+                        L’envoi par e-mail est sécurisé par Vercel et Resend. WhatsApp reste disponible si vous préférez.
                         Consultez notre <a href="/politique-confidentialite">politique de confidentialité</a>.
                       </p>
                       <div id="msgSubmit" class="h3 hidden" role="status" aria-live="polite"></div>
@@ -547,6 +558,6 @@
     <!-- Wow js file -->
     <script defer src="js/wow.min.js"></script>
     <!-- Main Custom js file -->
-    <script defer src="js/function.js?v=20260826-5"></script>
+    <script defer src="js/function.js?v=20260826-6"></script>
   </body>
 </html>

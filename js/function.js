@@ -141,14 +141,14 @@
 	var $whatsappform = $("#whatsappForm");
 	if ($whatsappform.length) {
 		var WHATSAPP_NUMBER = "33670424876"; // Gio Smart - 06 70 42 48 76
-		var CONTACT_EMAIL = "contact@giosmart-services.fr";
 		var selectedContactMethod = "whatsapp";
+		var $contactButtons = $whatsappform.find("[data-contact-method]");
 
 		$whatsappform.find("[data-contact-method]").on("click", function () {
 			selectedContactMethod = $(this).data("contact-method");
 		});
 
-		$whatsappform.on("submit", function (event) {
+		$whatsappform.on("submit", async function (event) {
 			event.preventDefault();
 			var submitter = event.originalEvent && event.originalEvent.submitter;
 			var contactMethod = submitter && submitter.dataset.contactMethod
@@ -157,30 +157,65 @@
 
 			var fname = $("#fname").val().trim();
 			var lname = $("#lname").val().trim();
+			var email = $("#email").val().trim();
 			var phone = $("#phone").val().trim();
 			var city = $("#city").val().trim();
 			var serviceType = $("#serviceType").val();
 			var preferredDate = $("#preferredDate").val();
 			var message = $("#message").val().trim();
+			var website = $("#website").val().trim();
 
 			if (!fname || !lname || !phone || !city || !serviceType || !message) {
 				submitMSG(false, "Merci de remplir tous les champs avant d'envoyer.");
 				return;
 			}
+			if (contactMethod === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+				submitMSG(false, "Merci d’indiquer une adresse e-mail valide.");
+				$("#email").trigger("focus");
+				return;
+			}
 
 			var text = "Bonjour Gio Smart, je m'appelle " + fname + " " + lname +
 				".\nTéléphone : " + phone +
+				(email ? "\nE-mail : " + email : "") +
 				"\nVille : " + city +
 				"\nService souhaité : " + serviceType +
 				(preferredDate ? "\nDate souhaitée : " + preferredDate : "") +
 				"\n\nDétails : " + message;
 
 			if (contactMethod === "email") {
-				var subject = "Demande de devis — " + serviceType + " — " + fname + " " + lname;
-				window.location.href = "mailto:" + CONTACT_EMAIL +
-					"?subject=" + encodeURIComponent(subject) +
-					"&body=" + encodeURIComponent(text);
-				submitMSG(true, "Ouverture de votre application e-mail...");
+				$contactButtons.prop("disabled", true);
+				$whatsappform.attr("aria-busy", "true");
+				submitMSG(true, "Envoi de votre demande en cours...");
+				try {
+					var response = await fetch("/api/contact", {
+						method: "POST",
+						headers: { "Content-Type": "application/json", "Accept": "application/json" },
+						body: JSON.stringify({
+							fname: fname,
+							lname: lname,
+							email: email,
+							phone: phone,
+							city: city,
+							serviceType: serviceType,
+							preferredDate: preferredDate,
+							message: message,
+							website: website
+						})
+					});
+					var result = await response.json().catch(function () { return {}; });
+					if (!response.ok) {
+						throw new Error(result.error || "L’envoi a échoué.");
+					}
+					$whatsappform[0].reset();
+					selectedContactMethod = "whatsapp";
+					submitMSG(true, "Merci ! Votre demande a bien été envoyée par e-mail.");
+				} catch (error) {
+					submitMSG(false, error.message || "L’envoi a échoué. Utilisez WhatsApp ou réessayez plus tard.");
+				} finally {
+					$contactButtons.prop("disabled", false);
+					$whatsappform.removeAttr("aria-busy");
+				}
 				return;
 			}
 

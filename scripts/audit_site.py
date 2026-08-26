@@ -88,7 +88,9 @@ for page in sorted(ROOT.glob("*.html")):
         for required_contact_markup in (
             'data-contact-method="whatsapp"',
             'data-contact-method="email"',
-            'action="mailto:contact@giosmart-services.fr"',
+            'action="/api/contact"',
+            'id="email"',
+            'id="website"',
         ):
             if required_contact_markup not in source:
                 errors.append(f"contact.html: missing contact option {required_contact_markup}")
@@ -147,6 +149,19 @@ if not service_worker.exists() or 'self.addEventListener("fetch"' not in service
     errors.append("sw.js: missing fetch handler")
 if not (ROOT / "images/apple-touch-icon.png").exists():
     errors.append("images/apple-touch-icon.png: missing iOS home-screen icon")
+
+contact_function = ROOT / "api/contact.mjs"
+if not contact_function.exists():
+    errors.append("api/contact.mjs: missing Resend contact function")
+else:
+    contact_function_source = contact_function.read_text(encoding="utf-8")
+    for required_function_markup in (
+        "process.env.RESEND_API_KEY",
+        "https://api.resend.com/emails",
+        'reply_to: form.email',
+    ):
+        if required_function_markup not in contact_function_source:
+            errors.append(f"api/contact.mjs: missing {required_function_markup}")
 
 if errors:
     raise SystemExit("\n".join(errors))

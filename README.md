@@ -6,13 +6,13 @@ Site vitrine multiservices (ménage, aide à la personne, déménagement, petits
 - HTML5 / CSS3 (Bootstrap)
 - jQuery, GSAP, WOW.js et bibliothèques chargées uniquement quand elles sont utiles
 - PWA installable (manifest, icônes iOS/Android et service worker)
-- Contact via WhatsApp (pas de backend/serveur nécessaire)
+- Contact via WhatsApp ou envoi direct par e-mail avec une fonction Vercel et Resend
 
 ## 💬 Formulaire de contact
-Le site n'a pas de backend. Le "formulaire" de `contact.html` construit un message et ouvre WhatsApp directement (`https://wa.me/33670424876?text=...`) avec le message pré-rempli, prêt à envoyer.
+Le formulaire de `contact.html` propose deux parcours : ouverture de WhatsApp avec le message pré-rempli, ou envoi direct par e-mail via `api/contact.mjs` et l’API Resend.
 
 - Le numéro WhatsApp est défini dans `js/function.js` → variable `WHATSAPP_NUMBER` (actuellement `33670424876`, soit 06 70 42 48 76). Pour le changer, modifie cette seule ligne.
-- Aucune variable d'environnement, aucun service tiers, aucun coût : fonctionne immédiatement sur n'importe quel hébergement statique (Vercel, GitHub Pages, Netlify...).
+- L’envoi direct nécessite la variable Vercel `RESEND_API_KEY`. La clé ne doit jamais être ajoutée au dépôt ni au JavaScript public.
 
 Le domaine officiel configuré dans les balises `canonical`, `sitemap.xml` et `robots.txt` est **https://giosmart-services.fr**. Si le domaine change, mets à jour ces 3 éléments.
 

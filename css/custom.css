@@ -399,6 +399,19 @@ img{
 	min-width: 230px;
 }
 
+.form-submit-options .btn-default:disabled{
+	cursor: wait;
+	opacity: 0.65;
+}
+
+.form-honeypot{
+	position: absolute !important;
+	left: -10000px !important;
+	width: 1px !important;
+	height: 1px !important;
+	overflow: hidden !important;
+}
+
 .contact-submit-email{
 	background-color: var(--primary-color);
 }
