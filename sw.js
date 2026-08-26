@@ -1,16 +1,16 @@
-const CACHE_VERSION = "giosmart-v20260826-4";
+const CACHE_VERSION = "giosmart-v20260826-5";
 const CACHE_PREFIX = "giosmart-v";
 const APP_SHELL = [
   "/",
   "/services",
   "/contact",
   "/css/bootstrap.min.css",
-  "/css/custom.css?v=20260826-4",
+  "/css/custom.css?v=20260826-5",
   "/css/slicknav.min.css",
   "/css/all.min.css",
   "/js/jquery-3.7.1.min.js",
   "/js/jquery.slicknav.js",
-  "/js/function.js?v=20260826-4",
+  "/js/function.js?v=20260826-5",
   "/images/logo.svg",
   "/images/favicon.png",
   "/images/apple-touch-icon.png",

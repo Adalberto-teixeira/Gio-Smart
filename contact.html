@@ -58,7 +58,7 @@
     <!-- Magnific Popup Core Css File -->
     <!-- Mouse Cursor Css File -->
     <!-- Main Custom Css -->
-    <link href="css/custom.css?v=20260826-4" rel="stylesheet" media="screen" />
+    <link href="css/custom.css?v=20260826-5" rel="stylesheet" media="screen" />
   </head>
   <body>
 <!-- Header Start -->
@@ -250,8 +250,8 @@
                   Prenez contact avec notre équipe
                 </h2>
                 <p class="wow fadeInUp" data-wow-delay="0.2s">
-                  Décrivez votre besoin : votre message sera préparé et ouvert
-                  directement dans WhatsApp pour un échange rapide.
+                  Décrivez votre besoin, puis choisissez de préparer votre
+                  message dans WhatsApp ou dans votre application e-mail.
                 </p>
               </div>
               <!-- Section Title End -->
@@ -260,10 +260,11 @@
               <div class="member-contect-form contact-form">
                 <form
                   id="whatsappForm"
-                  action="#"
+                  action="mailto:contact@giosmart-services.fr"
+                  method="post"
+                  enctype="text/plain"
                   class="wow fadeInUp"
                   data-wow-delay="0.4s"
-                  onsubmit="return false;"
                 >
                   <div class="row">
                     <div class="form-group col-md-6 mb-4">
@@ -347,23 +348,25 @@
                     </div>
 
                     <div class="col-md-12">
-                      <button type="submit" id="whatsappSubmit" class="btn-default">
-                        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
-                        Contacter sur WhatsApp
-                      </button>
+                      <div class="form-submit-options" aria-label="Choisissez votre moyen d’envoi">
+                        <button type="submit" id="whatsappSubmit" class="btn-default contact-submit-whatsapp" data-contact-method="whatsapp">
+                          <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+                          Envoyer par WhatsApp
+                        </button>
+                        <button type="submit" id="emailSubmit" class="btn-default contact-submit-email" data-contact-method="email">
+                          <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                          Envoyer par e-mail
+                        </button>
+                      </div>
                       <p class="form-privacy-note">
-                        En continuant, vous choisissez de transmettre ces informations via WhatsApp.
+                        Vos informations sont préparées localement, puis ouvertes uniquement dans le moyen de contact que vous choisissez.
                         Consultez notre <a href="/politique-confidentialite">politique de confidentialité</a>.
                       </p>
-                      <div id="msgSubmit" class="h3 hidden"></div>
+                      <div id="msgSubmit" class="h3 hidden" role="status" aria-live="polite"></div>
                       <div class="contact-alternatives" aria-label="Autres moyens de contact">
                         <a href="tel:+33670424876">
                           <i class="fa-solid fa-phone" aria-hidden="true"></i>
                           Appeler directement
-                        </a>
-                        <a href="mailto:contact@giosmart-services.fr">
-                          <i class="fa-solid fa-envelope" aria-hidden="true"></i>
-                          Envoyer un e-mail
                         </a>
                       </div>
                     </div>
@@ -544,6 +547,6 @@
     <!-- Wow js file -->
     <script defer src="js/wow.min.js"></script>
     <!-- Main Custom js file -->
-    <script defer src="js/function.js?v=20260826-4"></script>
+    <script defer src="js/function.js?v=20260826-5"></script>
   </body>
 </html>

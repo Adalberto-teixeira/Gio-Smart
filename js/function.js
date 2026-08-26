@@ -10,6 +10,48 @@
 		prependTo : '.responsive-menu'
 	});
 
+	/* Mobile header: visible at the top and whenever the user scrolls upward */
+	var mobileHeader = document.querySelector(".header-sticky");
+	var lastMobileScroll = window.pageYOffset;
+	var mobileScrollTicking = false;
+
+	function updateMobileHeader() {
+		if (!mobileHeader) return;
+		if (window.innerWidth > 991) {
+			mobileHeader.classList.remove("active", "hide");
+			lastMobileScroll = window.pageYOffset;
+			return;
+		}
+
+		var currentScroll = Math.max(window.pageYOffset, 0);
+		var menuIsOpen = document.querySelector(".slicknav_btn.slicknav_open");
+
+		if (currentScroll <= 90) {
+			mobileHeader.classList.remove("active", "hide");
+		} else {
+			mobileHeader.classList.add("active");
+			if (menuIsOpen || currentScroll < lastMobileScroll - 5) {
+				mobileHeader.classList.remove("hide");
+			} else if (currentScroll > lastMobileScroll + 5) {
+				mobileHeader.classList.add("hide");
+			}
+		}
+
+		lastMobileScroll = currentScroll;
+	}
+
+	window.addEventListener("scroll", function () {
+		if (!mobileScrollTicking) {
+			window.requestAnimationFrame(function () {
+				updateMobileHeader();
+				mobileScrollTicking = false;
+			});
+			mobileScrollTicking = true;
+		}
+	}, { passive: true });
+	window.addEventListener("resize", updateMobileHeader);
+	updateMobileHeader();
+
 	/* client slider box JS */
 	if ($('.client-slider-box').length) {
 		const client_slider_box = new Swiper('.client-slider-box .swiper', {
@@ -95,13 +137,23 @@
 		}
 	}
 
-	/* Contact form -> WhatsApp */
+	/* Contact form -> WhatsApp or email */
 	var $whatsappform = $("#whatsappForm");
 	if ($whatsappform.length) {
 		var WHATSAPP_NUMBER = "33670424876"; // Gio Smart - 06 70 42 48 76
+		var CONTACT_EMAIL = "contact@giosmart-services.fr";
+		var selectedContactMethod = "whatsapp";
+
+		$whatsappform.find("[data-contact-method]").on("click", function () {
+			selectedContactMethod = $(this).data("contact-method");
+		});
 
 		$whatsappform.on("submit", function (event) {
 			event.preventDefault();
+			var submitter = event.originalEvent && event.originalEvent.submitter;
+			var contactMethod = submitter && submitter.dataset.contactMethod
+				? submitter.dataset.contactMethod
+				: selectedContactMethod;
 
 			var fname = $("#fname").val().trim();
 			var lname = $("#lname").val().trim();
@@ -123,6 +175,15 @@
 				(preferredDate ? "\nDate souhaitée : " + preferredDate : "") +
 				"\n\nDétails : " + message;
 
+			if (contactMethod === "email") {
+				var subject = "Demande de devis — " + serviceType + " — " + fname + " " + lname;
+				window.location.href = "mailto:" + CONTACT_EMAIL +
+					"?subject=" + encodeURIComponent(subject) +
+					"&body=" + encodeURIComponent(text);
+				submitMSG(true, "Ouverture de votre application e-mail...");
+				return;
+			}
+
 			var url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
 			var whatsappWindow = window.open(url, "_blank");
 			if (whatsappWindow) {
@@ -133,7 +194,7 @@
 			submitMSG(true, "Redirection vers WhatsApp...");
 		});
 	}
-	/* Contact form -> WhatsApp end */
+	/* Contact form end */
 
 	function submitMSG(valid, msg){
 		if(valid){

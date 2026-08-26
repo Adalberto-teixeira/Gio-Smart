@@ -355,13 +355,13 @@ for path in ROOT.glob("*.html"):
     # while these two files change with normal site releases.
     source = re.sub(
         r'href="css/custom\.css(?:\?v=[^"]+)?"',
-        'href="css/custom.css?v=20260826-4"',
+        'href="css/custom.css?v=20260826-5"',
         source,
         count=1,
     )
     source = re.sub(
         r'src="js/function\.js(?:\?v=[^"]+)?"',
-        'src="js/function.js?v=20260826-4"',
+        'src="js/function.js?v=20260826-5"',
         source,
         count=1,
     )

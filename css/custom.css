@@ -370,10 +370,45 @@ img{
 	color: var(--primary-color);
 }
 
+.conversion-cta .btn-default:hover,
+.conversion-cta .btn-default:focus-visible{
+	color: var(--white-color);
+}
+
+.conversion-cta .btn-default::after{
+	background: #1477c8;
+}
+
 .conversion-cta .btn-default.btn-highlighted{
 	background-color: transparent;
 	border: 1px solid rgba(255, 255, 255, 0.7);
 	color: var(--white-color);
+}
+
+.conversion-cta + .main-footer{
+	margin-top: 0;
+}
+
+.form-submit-options{
+	display: flex;
+	flex-wrap: wrap;
+	gap: 14px;
+}
+
+.form-submit-options .btn-default{
+	min-width: 230px;
+}
+
+.contact-submit-email{
+	background-color: var(--primary-color);
+}
+
+.contact-submit-whatsapp::after{
+	background-color: #187a45;
+}
+
+.contact-submit-email::after{
+	background-color: #1477c8;
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -4097,6 +4132,20 @@ header.main-header .header-sticky.active{
 		font-size: 16px;
 	}
 
+	header.main-header{
+		min-height: 91px;
+	}
+
+	header.main-header .header-sticky{
+		transition: transform 0.28s ease, background-color 0.28s ease, box-shadow 0.28s ease;
+		will-change: transform;
+	}
+
+	header.main-header .header-sticky.active{
+		padding-top: env(safe-area-inset-top);
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+	}
+
 	.trust-strip-grid{
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: 20px 0;
@@ -4948,6 +4997,17 @@ header.main-header .header-sticky.active{
 		flex-direction: column;
 	}
 
+	.form-submit-options{
+		display: grid;
+		width: 100%;
+	}
+
+	.form-submit-options .btn-default{
+		width: 100%;
+		min-width: 0;
+		text-align: center;
+	}
+
 	.hero-btn{
 		display: grid;
 		gap: 12px;
@@ -5187,15 +5247,25 @@ header.main-header .header-sticky.active{
 
 	.footer-contact-box{
 		width: 100%;
-		gap: 20px;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 8px;
+	}
+
+	.footer-contact-item{
+		min-width: 0;
+		flex-direction: column;
+		justify-content: flex-start;
+		text-align: center;
 	}
 
 	.footer-contact-item::before{
-        right: -10px;
+        right: -4px;
     }
 
 	.footer-contact-item .icon-box{
-        margin-right: 10px;
+		min-height: 28px;
+		margin: 0 0 7px;
     }
 
 	.footer-contact-item .icon-box img{
@@ -5203,16 +5273,21 @@ header.main-header .header-sticky.active{
     }
 
 	.footer-contact-content{
-        width: calc(100% - 30px);
+		width: 100%;
+		min-width: 0;
     }
 
 	.footer-contact-content h3{
-		font-size: 16px;
+		font-size: 13px;
+		line-height: 1.2;
 		margin-bottom: 2px;
+		overflow-wrap: anywhere;
 	}
 
 	.footer-contact-content p{
-		font-size: 14px;
+		font-size: 12px;
+		line-height: 1.35;
+		overflow-wrap: anywhere;
 	}
 
 	.footer-links{

@@ -84,6 +84,15 @@ for page in sorted(ROOT.glob("*.html")):
         if '<a href="/services-numeriques">Soins des animaux</a>' in source:
             errors.append("services.html: animal care title points to digital services")
 
+    if page.name == "contact.html":
+        for required_contact_markup in (
+            'data-contact-method="whatsapp"',
+            'data-contact-method="email"',
+            'action="mailto:contact@giosmart-services.fr"',
+        ):
+            if required_contact_markup not in source:
+                errors.append(f"contact.html: missing contact option {required_contact_markup}")
+
     if page.name not in ("404.html", "page-introuvable.html"):
         title_match = re.search(r"<title>(.*?)</title>", source, re.DOTALL | re.IGNORECASE)
         description_match = re.search(
