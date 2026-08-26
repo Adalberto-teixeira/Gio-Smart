@@ -36,6 +36,97 @@ ROUTE_LABELS = {
     "/aide-demenagement-marseille-vitrolles": "Voir le projet de déménagement",
 }
 
+SEO_METADATA = {
+    "index.html": (
+        "Services à domicile à Martigues | Gio Smart",
+        "Ménage, petits travaux, déménagement et aide quotidienne à Martigues et alentours. Contactez Gio Smart pour un devis gratuit et une réponse rapide.",
+    ),
+    "services.html": (
+        "Services à domicile à Martigues | Nos prestations",
+        "Découvrez les services Gio Smart à Martigues : ménage, déménagement, petits travaux, aide quotidienne, numérique, couture et soins des animaux.",
+    ),
+    "a-propos.html": (
+        "Gio Smart, entreprise locale de services à Martigues",
+        "Découvrez Gio Smart, une entreprise locale à taille humaine qui accompagne les particuliers à Martigues avec des services pratiques et accessibles.",
+    ),
+    "contact.html": (
+        "Contact et devis gratuit à Martigues | Gio Smart",
+        "Contactez Gio Smart pour votre besoin à Martigues et alentours. Demandez un devis gratuit par formulaire, WhatsApp, téléphone ou e-mail.",
+    ),
+    "faq.html": (
+        "Questions fréquentes sur nos services | Gio Smart",
+        "Réponses aux questions sur les tarifs, réservations, délais et zones d'intervention des services Gio Smart à Martigues et alentours.",
+    ),
+    "tarifs.html": (
+        "Tarifs des services à domicile à Martigues | Gio Smart",
+        "Consultez les tarifs indicatifs Gio Smart pour le ménage, les petits travaux, le déménagement, la couture et les autres services à Martigues.",
+    ),
+    "menage-et-entretien.html": (
+        "Ménage à domicile à Martigues | Gio Smart",
+        "Service de ménage ponctuel ou régulier à Martigues et alentours. Entretien du logement adapté à vos besoins et devis gratuit avec Gio Smart.",
+    ),
+    "aide-a-la-personne.html": (
+        "Aide quotidienne à domicile à Martigues | Gio Smart",
+        "Accompagnement quotidien, courses et aide administrative à Martigues. Une présence de proximité adaptée aux besoins de chaque personne.",
+    ),
+    "aide-au-demenagement.html": (
+        "Aide au déménagement à Martigues | Gio Smart",
+        "Aide au chargement, transport, démontage et remontage de meubles à Martigues et alentours. Demandez votre devis gratuit à Gio Smart.",
+    ),
+    "services-numeriques.html": (
+        "Assistance numérique à Martigues | Gio Smart",
+        "Aide informatique, configuration d'appareils, création de documents et services web à Martigues. Un accompagnement numérique simple et humain.",
+    ),
+    "blanchisserie-et-couture.html": (
+        "Blanchisserie et couture à Martigues | Gio Smart",
+        "Lavage, repassage, ourlets et petites retouches à Martigues. Gio Smart prend soin de votre linge avec un service pratique et personnalisé.",
+    ),
+    "services-soins-animaux.html": (
+        "Soins des animaux à domicile à Martigues | Gio Smart",
+        "Promenade, alimentation et surveillance de vos animaux à Martigues et alentours. Contactez Gio Smart pour organiser une prestation adaptée.",
+    ),
+    "petits-travaux-maison.html": (
+        "Petits travaux à domicile à Martigues | Gio Smart",
+        "Montage de meubles, fixations, petites réparations et peinture à Martigues. Expliquez votre besoin et recevez un devis gratuit Gio Smart.",
+    ),
+    "nettoyage-apres-travaux-demenagement.html": (
+        "Nettoyage après travaux à Martigues | Gio Smart",
+        "Remise en état après travaux ou déménagement à Martigues : dépoussiérage, sols et nettoyage complet. Demandez un devis gratuit.",
+    ),
+    "nos-realisations.html": (
+        "Réalisations et services à Martigues | Gio Smart",
+        "Découvrez des réalisations Gio Smart en petits travaux, déménagement, entretien, jardinage et services numériques à Martigues et alentours.",
+    ),
+    "carte-visite-branding.html": (
+        "Création de cartes de visite | Réalisation Gio Smart",
+        "Découvrez une création de cartes de visite personnalisées réalisée par Gio Smart : conception graphique, identité visuelle et impression.",
+    ),
+    "montage-cuisine-marseille.html": (
+        "Montage de meubles à Marseille | Réalisation Gio Smart",
+        "Montage de meubles et installation murale réalisés à Marseille par Gio Smart. Découvrez les étapes et le résultat de cette intervention.",
+    ),
+    "nettoyage-jardin-vitrolles.html": (
+        "Nettoyage de jardin à Vitrolles | Gio Smart",
+        "Nettoyage de jardin réalisé à Vitrolles : feuilles, branches et évacuation des déchets verts. Découvrez cette réalisation Gio Smart.",
+    ),
+    "local-technique-construction.html": (
+        "Construction d'un local technique à Marseille | Gio Smart",
+        "Découvrez la construction d'un local technique à Marseille : traçage, élévation en parpaings et toiture, réalisée par Gio Smart.",
+    ),
+    "aide-demenagement-marseille-vitrolles.html": (
+        "Déménagement Marseille–Vitrolles | Gio Smart",
+        "Aide au déménagement entre Marseille et Vitrolles : manutention, transport et montage de meubles. Découvrez cette intervention Gio Smart.",
+    ),
+    "mentions-legales.html": (
+        "Mentions légales | Gio Smart",
+        "Consultez les informations légales, l'éditeur, l'hébergement et les conditions d'utilisation du site Gio Smart Services.",
+    ),
+    "politique-confidentialite.html": (
+        "Politique de confidentialité | Gio Smart",
+        "Découvrez comment Gio Smart collecte, utilise et protège les informations transmises via son site et ses moyens de contact.",
+    ),
+}
+
 # Vercel automatically serves a root 404.html for unknown static routes. Keep
 # the designed error page as the single source so both versions stay aligned.
 not_found_source = ROOT / "page-introuvable.html"
@@ -60,6 +151,18 @@ def clean_internal_url(url):
 for path in ROOT.glob("*.html"):
     source = path.read_text(encoding="utf-8")
 
+    metadata = SEO_METADATA.get(path.name)
+    if metadata:
+        title, description = metadata
+        source = re.sub(r'<title>.*?</title>', f'<title>{title}</title>', source, count=1, flags=re.DOTALL | re.IGNORECASE)
+        source = re.sub(
+            r'(<meta\s+name="description"\s+content=")[^"]*("\s*/?>)',
+            lambda match: match.group(1) + html.escape(description, quote=True) + match.group(2),
+            source,
+            count=1,
+            flags=re.DOTALL | re.IGNORECASE,
+        )
+
     # The full-screen loader hides useful content until every third-party asset
     # has finished. The page remains fully usable without it.
     source = PRELOADER.sub("\n", source)
@@ -73,6 +176,22 @@ for path in ROOT.glob("*.html"):
     source = re.sub(r'\s*<link[^>]+href=["\']css/mousecursor\.css["\'][^>]*>', '', source)
     source = re.sub(r'\s*<script[^>]+src=["\']js/magiccursor\.js["\'][^>]*></script>', '', source)
     source = re.sub(r'\s*<script[^>]+src=["\']js/jquery\.mb\.YTPlayer\.min\.js["\'][^>]*></script>', '', source)
+
+    has_swiper = bool(re.search(r'class="[^"]*\bswiper\b', source, re.IGNORECASE))
+    has_counter = bool(re.search(r'class="[^"]*\bcounter\b', source, re.IGNORECASE))
+    has_skills = bool(re.search(r'class="[^"]*\bskills-progress', source, re.IGNORECASE))
+    has_popup = bool(re.search(r'class="[^"]*\bpopup-video\b', source, re.IGNORECASE))
+
+    if not has_swiper:
+        source = re.sub(r'\s*<link[^>]+href=["\']css/swiper-bundle\.min\.css["\'][^>]*>', '', source)
+        source = re.sub(r'\s*<script[^>]+src=["\']js/swiper-bundle\.min\.js["\'][^>]*></script>', '', source)
+    if not has_counter:
+        source = re.sub(r'\s*<script[^>]+src=["\']js/jquery\.counterup\.min\.js["\'][^>]*></script>', '', source)
+    if not has_counter and not has_skills:
+        source = re.sub(r'\s*<script[^>]+src=["\']js/jquery\.waypoints\.min\.js["\'][^>]*></script>', '', source)
+    if not has_popup:
+        source = re.sub(r'\s*<link[^>]+href=["\']css/magnific-popup\.css["\'][^>]*>', '', source)
+        source = re.sub(r'\s*<script[^>]+src=["\']js/jquery\.magnific-popup\.min\.js["\'][^>]*></script>', '', source)
 
     # Keep script order while allowing HTML parsing to continue.
     source = re.sub(
@@ -212,13 +331,13 @@ for path in ROOT.glob("*.html"):
     # while these two files change with normal site releases.
     source = re.sub(
         r'href="css/custom\.css(?:\?v=[^"]+)?"',
-        'href="css/custom.css?v=20260826-2"',
+        'href="css/custom.css?v=20260826-3"',
         source,
         count=1,
     )
     source = re.sub(
         r'src="js/function\.js(?:\?v=[^"]+)?"',
-        'src="js/function.js?v=20260826-2"',
+        'src="js/function.js?v=20260826-3"',
         source,
         count=1,
     )

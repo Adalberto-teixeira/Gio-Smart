@@ -804,7 +804,7 @@ header.main-header .header-sticky.active{
 
 .hero{
 	position: relative;
-	background: url('../images/hero-bg.jpg');
+	background: url('../images/hero-bg.webp');
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover;
@@ -1571,7 +1571,7 @@ header.main-header .header-sticky.active{
 /************************************/
 
 .quick-facts{
-	background: url(../images/quick-facts-bg.jpg), var(--primary-color) no-repeat;
+	background: url(../images/quick-facts-bg.webp), var(--primary-color) no-repeat;
 	background-position: center center;
 	background-size: cover;
 	padding: 100px 0 0;
@@ -1906,7 +1906,7 @@ header.main-header .header-sticky.active{
 /************************************/
 
 .our-faqs{
-	background: url('../images/faqs-bg.jpg') no-repeat;
+	background: url('../images/faqs-bg.webp') no-repeat;
 	background-position: top center;
 	background-size: cover;
 	padding: 50px 0 350px;
@@ -2158,7 +2158,7 @@ header.main-header .header-sticky.active{
 
 .page-header{
 	position: relative;
-	background: url('../images/page-header-bg.jpg') no-repeat;
+	background: url('../images/page-header-bg.webp') no-repeat;
 	background-position: center center;
 	background-size: cover;
 	padding: 245px 0 190px;

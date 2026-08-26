@@ -27,6 +27,7 @@ class PageParser(HTMLParser):
         self.references = []
         self.ids = []
         self.h1_count = 0
+        self.images_without_dimensions = 0
 
     def handle_starttag(self, tag, attrs):
         attributes = dict(attrs)
@@ -34,6 +35,8 @@ class PageParser(HTMLParser):
             self.ids.append(attributes["id"])
         if tag == "h1":
             self.h1_count += 1
+        if tag == "img" and (not attributes.get("width") or not attributes.get("height")):
+            self.images_without_dimensions += 1
         for name in ("src", "href"):
             value = attributes.get(name, "")
             if value and not value.startswith(("http:", "https:", "tel:", "mailto:", "#", "//", "data:")):
@@ -49,6 +52,8 @@ for page in sorted(ROOT.glob("*.html")):
     duplicates = [item for item, count in Counter(parser.ids).items() if count > 1]
     if duplicates:
         errors.append(f"{page.name}: duplicate ids {duplicates}")
+    if parser.images_without_dimensions:
+        errors.append(f"{page.name}: {parser.images_without_dimensions} images missing width/height")
     if page.name != "page-introuvable.html" and parser.h1_count != 1:
         errors.append(f"{page.name}: expected one H1, found {parser.h1_count}")
 
