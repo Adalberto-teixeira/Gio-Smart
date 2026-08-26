@@ -159,6 +159,7 @@ else:
         "process.env.RESEND_API_KEY",
         "https://api.resend.com/emails",
         'reply_to: form.email',
+        '"configuration_required"',
     ):
         if required_function_markup not in contact_function_source:
             errors.append(f"api/contact.mjs: missing {required_function_markup}")

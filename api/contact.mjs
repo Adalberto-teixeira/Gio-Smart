@@ -23,6 +23,14 @@ function escapeHtml(value) {
 
 export default {
   async fetch(request) {
+    if (request.method === "GET") {
+      const ready = Boolean(process.env.RESEND_API_KEY);
+      return json(
+        { status: ready ? "ready" : "configuration_required" },
+        ready ? 200 : 503
+      );
+    }
+
     if (request.method !== "POST") {
       return json({ error: "Méthode non autorisée." }, 405);
     }
