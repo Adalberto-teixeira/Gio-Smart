@@ -163,3 +163,12 @@
 	}
 	
 })(jQuery);
+
+/* Progressive Web App registration */
+if ("serviceWorker" in navigator) {
+	window.addEventListener("load", function () {
+		navigator.serviceWorker.register("/sw.js").catch(function () {
+			// The website remains fully functional when service workers are unavailable.
+		});
+	});
+}

@@ -151,6 +151,30 @@ def clean_internal_url(url):
 for path in ROOT.glob("*.html"):
     source = path.read_text(encoding="utf-8")
 
+    pwa_head = '''
+  <meta name="theme-color" content="#3797e4">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Gio Smart">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">'''
+    if 'rel="manifest"' not in source:
+        source = re.sub(
+            r'(<meta\s+name="viewport"[^>]*>)',
+            r'\1' + pwa_head,
+            source,
+            count=1,
+            flags=re.IGNORECASE,
+        )
+    source = re.sub(
+        r'<link\s+rel="apple-touch-icon"[^>]*>',
+        '<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">',
+        source,
+        count=1,
+        flags=re.IGNORECASE,
+    )
+
     metadata = SEO_METADATA.get(path.name)
     if metadata:
         title, description = metadata
@@ -331,13 +355,13 @@ for path in ROOT.glob("*.html"):
     # while these two files change with normal site releases.
     source = re.sub(
         r'href="css/custom\.css(?:\?v=[^"]+)?"',
-        'href="css/custom.css?v=20260826-3"',
+        'href="css/custom.css?v=20260826-4"',
         source,
         count=1,
     )
     source = re.sub(
         r'src="js/function\.js(?:\?v=[^"]+)?"',
-        'src="js/function.js?v=20260826-3"',
+        'src="js/function.js?v=20260826-4"',
         source,
         count=1,
     )

@@ -69,6 +69,14 @@ for page in sorted(ROOT.glob("*.html")):
         errors.append(f"{page.name}: .html links found {parser.html_extension_refs}")
     if parser.unnamed_visual_links:
         errors.append(f"{page.name}: {parser.unnamed_visual_links} visual links missing aria-label")
+    for required_pwa_markup in (
+        'name="theme-color"',
+        'name="apple-mobile-web-app-capable" content="yes"',
+        'rel="manifest" href="/manifest.webmanifest"',
+        'rel="apple-touch-icon"',
+    ):
+        if required_pwa_markup not in source:
+            errors.append(f"{page.name}: missing PWA markup {required_pwa_markup}")
     if page.name != "page-introuvable.html" and parser.h1_count != 1:
         errors.append(f"{page.name}: expected one H1, found {parser.h1_count}")
 
@@ -109,6 +117,27 @@ namespace = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 for node in ET.parse(ROOT / "sitemap.xml").findall(".//s:loc", namespace):
     if not resolve_local_reference(node.text).exists():
         errors.append(f"sitemap.xml: missing {node.text}")
+
+manifest_path = ROOT / "manifest.webmanifest"
+try:
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+except (OSError, json.JSONDecodeError) as error:
+    errors.append(f"manifest.webmanifest: invalid or missing ({error})")
+else:
+    if manifest.get("display") != "standalone":
+        errors.append("manifest.webmanifest: display must be standalone")
+    if manifest.get("start_url") != "/" or manifest.get("scope") != "/":
+        errors.append("manifest.webmanifest: invalid start_url or scope")
+    for size in ("192x192", "512x512"):
+        icon = next((item for item in manifest.get("icons", []) if item.get("sizes") == size), None)
+        if not icon or not resolve_local_reference(icon.get("src", "")).exists():
+            errors.append(f"manifest.webmanifest: missing {size} icon")
+
+service_worker = ROOT / "sw.js"
+if not service_worker.exists() or 'self.addEventListener("fetch"' not in service_worker.read_text(encoding="utf-8"):
+    errors.append("sw.js: missing fetch handler")
+if not (ROOT / "images/apple-touch-icon.png").exists():
+    errors.append("images/apple-touch-icon.png: missing iOS home-screen icon")
 
 if errors:
     raise SystemExit("\n".join(errors))

@@ -5,6 +5,7 @@ Site vitrine multiservices (ménage, aide à la personne, déménagement, petits
 ## Stack
 - HTML5 / CSS3 (Bootstrap)
 - jQuery, GSAP, WOW.js et bibliothèques chargées uniquement quand elles sont utiles
+- PWA installable (manifest, icônes iOS/Android et service worker)
 - Contact via WhatsApp (pas de backend/serveur nécessaire)
 
 ## 💬 Formulaire de contact
@@ -25,7 +26,8 @@ Le domaine officiel configuré dans les balises `canonical`, `sitemap.xml` et `r
 partials    En-tête et pied de page partagés
 scripts     Construction, optimisation et audit automatique
 sitemap.xml / robots.txt   SEO
-vercel.json   Configuration du cache pour le déploiement Vercel
+manifest.webmanifest / sw.js   Installation PWA et cache hors connexion
+vercel.json   Routage propre, sécurité et cache pour le déploiement Vercel
 ```
 
 ## Construction et contrôle qualité
@@ -36,7 +38,7 @@ Après une modification du contenu partagé, des pages ou des styles, exécuter 
 python3 scripts/build_site.py
 ```
 
-Cette commande synchronise `partials/header.html` et `partials/footer.html`, applique les optimisations, ajoute les dimensions intrinsèques des images et vérifie les liens, routes propres, titres, descriptions, données structurées, accessibilité de base et ressources inutiles.
+Cette commande synchronise `partials/header.html` et `partials/footer.html`, applique les optimisations, ajoute les dimensions intrinsèques des images et vérifie les liens, routes propres, titres, descriptions, données structurées, accessibilité de base, ressources inutiles et les éléments nécessaires à l'installation PWA.
 
 Pour modifier le menu ou le pied de page, modifier directement le fichier correspondant dans `partials/`, puis relancer la construction.
 
@@ -55,7 +57,7 @@ Pour modifier le menu ou le pied de page, modifier directement le fichier corres
 - Suppression de `js/validator.min.js`, devenu inutile après le passage au contact WhatsApp
 - Correction de la structure HTML : suppression de balises `</html>` dupliquées trouvées sur 5 pages (`local-technique-construction.html`, `montage-cuisine-marseille.html`, `creation-site-web.html`, `carte-visite-branding.html`, `nettoyage-jardin-vitrolles.html`)
 - Ajout de données structurées Schema.org (LocalBusiness) sur la page d'accueil : nom, adresse, téléphone, zone de service — améliore la visibilité sur Google Maps et les recherches locales
-- Ajout de l'adresse complète de l'entreprise (12 Avenue Charles Moulet, 13500 Martigues) dans le pied de page de toutes les pages (elle n'apparaissait auparavant que sur la page mentions légales)
+- Simplification de l'adresse visible dans le pied de page en « Martigues et alentours », tout en conservant les données légales et structurées là où elles sont nécessaires
 - Correction d'une faute de frappe dans l'email du pied de page (`icontact@` → `contact@`) sur une page
 - Optimisation SEO local : ajout de « Martigues » dans le titre et la meta description de 21 pages qui ne le mentionnaient pas
 - Suppression de 17 pages qui étaient devenues des « pages orphelines » après la suppression du blog (aucun lien interne ne menait vers elles, seul le sitemap les référençait) : le contenu n'était plus accessible en navigation normale et n'apportait plus de valeur sans le blog
@@ -68,8 +70,8 @@ Pour modifier le menu ou le pied de page, modifier directement le fichier corres
 - Compression de toutes les images JPEG et PNG (redimensionnement à 1920px max, compression optimisée, réduction des couleurs pour les PNG) : le dossier `/images` passe de 15,95 Mo à 5,16 Mo, soit une réduction de 68%, sans perte de qualité visible
 
 ## À améliorer (recommandé, non bloquant)
-- Ajouter Google Analytics / Search Console une fois le domaine en ligne.
-- Convertir les JPEG en WebP pour un gain supplémentaire de poids (non fait ici par manque d'outil de conversion disponible, mais recommandé pour la suite).
+- Connecter Google Search Console et un outil de mesure respectueux du consentement.
+- Ajouter uniquement des avis clients vérifiables, des garanties réelles et des photos de l'équipe autorisées.
 
 - Suppression finale de 13 images orphelines restantes (anciennes photos d'articles de blog post-1 à post-6, et autres visuels liés à des pages déjà supprimées) — 1,1 Mo libérés supplémentaires. Vérification finale complète : liens, balises HTML, CSS, JS, attributs alt, identifiants uniques — aucune anomalie restante, site prêt pour la mise en ligne
 - Correction critique : les liens du menu mobile utilisaient un format absolu (`/page.html`) qui provoquait une erreur "ERR_FILE_NOT_FOUND" en ouvrant le site en local (double-clic sur index.html). Tous les liens ont été convertis en format relatif, fonctionnel aussi bien en local que sur le serveur en ligne

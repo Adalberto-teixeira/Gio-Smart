@@ -2094,6 +2094,16 @@ header.main-header .header-sticky.active{
 	margin: 0;
 }
 
+.footer-contact-content p a{
+	color: inherit;
+	overflow-wrap: anywhere;
+}
+
+.footer-contact-content p a:hover,
+.footer-contact-content p a:focus-visible{
+	color: var(--accent-color);
+}
+
 .about-footer{
 	width: 100%;
 	max-width: 420px;
