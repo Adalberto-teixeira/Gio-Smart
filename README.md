@@ -4,7 +4,7 @@ Site vitrine multiservices (ménage, aide à la personne, déménagement, petits
 
 ## Stack
 - HTML5 / CSS3 (Bootstrap)
-- jQuery, GSAP, Swiper.js, WOW.js
+- jQuery, GSAP, WOW.js et bibliothèques chargées uniquement quand elles sont utiles
 - Contact via WhatsApp (pas de backend/serveur nécessaire)
 
 ## 💬 Formulaire de contact
@@ -21,10 +21,24 @@ Le domaine officiel configuré dans les balises `canonical`, `sitemap.xml` et `r
 /js         Scripts (jQuery, GSAP, Swiper, script custom function.js)
 /images     Images du site
 /webfonts   Icônes Font Awesome
-*.html      Pages du site (45 pages)
+*.html      Pages statiques du site (23 pages publiques + page 404)
+partials    En-tête et pied de page partagés
+scripts     Construction, optimisation et audit automatique
 sitemap.xml / robots.txt   SEO
 vercel.json   Configuration du cache pour le déploiement Vercel
 ```
+
+## Construction et contrôle qualité
+
+Après une modification du contenu partagé, des pages ou des styles, exécuter :
+
+```bash
+python3 scripts/build_site.py
+```
+
+Cette commande synchronise `partials/header.html` et `partials/footer.html`, applique les optimisations, ajoute les dimensions intrinsèques des images et vérifie les liens, routes propres, titres, descriptions, données structurées, accessibilité de base et ressources inutiles.
+
+Pour modifier le menu ou le pied de page, modifier directement le fichier correspondant dans `partials/`, puis relancer la construction.
 
 ## Historique des corrections (avant mise sur GitHub)
 - Uniformisation de l'email de contact → `contact@giosmart-services.fr`
